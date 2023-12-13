@@ -157,3 +157,14 @@ body{
     color: var(--color-white);
     
 }
+
+/* 더보기버튼 */
+.view-more{
+    width: 100%;
+    max-width: 300px;
+    margin: 20px auto;
+    display: block;
+}
+.view-more.hide{
+    display: none;
+}

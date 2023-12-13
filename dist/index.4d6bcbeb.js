@@ -732,18 +732,21 @@ var _search = require("../components/Search");
 var _searchDefault = parcelHelpers.interopDefault(_search);
 var _movieList = require("../components/MovieList");
 var _movieListDefault = parcelHelpers.interopDefault(_movieList);
+var _movieListMore = require("../components/MovieListMore");
+var _movieListMoreDefault = parcelHelpers.interopDefault(_movieListMore);
 class Home extends (0, _heropy.Component) {
     render() {
         const headline = new (0, _headlineDefault.default)().el;
         const search = new (0, _searchDefault.default)().el;
         const movieList = new (0, _movieListDefault.default)().el;
+        const movieListMore = new (0, _movieListMoreDefault.default)().el;
         this.el.classList.add("container");
-        this.el.append(headline, search, movieList);
+        this.el.append(headline, search, movieList, movieListMore);
     }
 }
 exports.default = Home;
 
-},{"../core/heropy":"57bZf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../components/Headline":"gaVgo","../components/Search":"jqPPz","../components/MovieList":"8UDl3"}],"gaVgo":[function(require,module,exports) {
+},{"../core/heropy":"57bZf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../components/Headline":"gaVgo","../components/Search":"jqPPz","../components/MovieList":"8UDl3","../components/MovieListMore":"3ZUar"}],"gaVgo":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _heropy = require("../core/heropy");
@@ -804,20 +807,20 @@ var _heropy = require("../core/heropy");
 const store = new (0, _heropy.Store)({
     searchText: "",
     page: 1,
+    pageMax: 1,
     movies: []
 });
 exports.default = store;
 const searchMovies = async (page)=>{
-    if (page === 1) {
-        store.state.page = 1; //화면갱신
-        store.state.movies = [];
-    }
+    store.state.page = page;
+    if (page === 1) store.state.movies = [];
     const res = await fetch(`https://omdbapi.com?apikey=7035c60c&s=${store.state.searchText}&page=${page}`);
-    const { Search } = await res.json();
+    const { Search, totalResults } = await res.json();
     store.state.movies = [
         ...store.state.movies,
         ...Search
     ];
+    store.state.pageMax = Math.ceil(Number(totalResults) / 10);
 };
 
 },{"../core/heropy":"57bZf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8UDl3":[function(require,module,exports) {
@@ -879,6 +882,32 @@ class MovieItem extends (0, _heropy.Component) {
 }
 exports.default = MovieItem;
 
-},{"../core/heropy":"57bZf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["3zq8u","gLLPy"], "gLLPy", "parcelRequire6588")
+},{"../core/heropy":"57bZf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3ZUar":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _heropy = require("../core/heropy");
+var _movie = require("../store/movie");
+var _movieDefault = parcelHelpers.interopDefault(_movie);
+class MovieListMore extends (0, _heropy.Component) {
+    constructor(){
+        super({
+            tagName: "button"
+        });
+        (0, _movieDefault.default).subscribe("pageMax", ()=>{
+            const { page, pageMax } = (0, _movieDefault.default).state;
+            pageMax > page ? this.el.classList.remove("hide") : this.el.classList.add("hide");
+        });
+    }
+    render() {
+        this.el.classList.add("btn", "view-more", "hide");
+        this.el.textContent = "Viw more..";
+        this.el.addEventListener("click", async ()=>{
+            await (0, _movie.searchMovies)((0, _movieDefault.default).state.page + 1);
+        });
+    }
+}
+exports.default = MovieListMore;
+
+},{"../core/heropy":"57bZf","../store/movie":"kq1bo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["3zq8u","gLLPy"], "gLLPy", "parcelRequire6588")
 
 //# sourceMappingURL=index.4d6bcbeb.js.map
