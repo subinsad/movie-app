@@ -575,7 +575,277 @@ function hmrAccept(bundle /*: ParcelRequire */ , id /*: string */ ) {
 }
 
 },{}],"gLLPy":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+var _app = require("./App");
+var _appDefault = parcelHelpers.interopDefault(_app);
+var _routes = require("./routes");
+var _routesDefault = parcelHelpers.interopDefault(_routes);
+const root = document.querySelector("#root");
+root.append(new (0, _appDefault.default)().el);
+(0, _routesDefault.default)();
 
-},{}]},["3zq8u","gLLPy"], "gLLPy", "parcelRequire6588")
+},{"./App":"2kQhy","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./routes":"3L9mC"}],"2kQhy":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _heropy = require("./core/heropy");
+class App extends (0, _heropy.Component) {
+    render() {
+        const routerView = document.createElement("router-view");
+        this.el.append(routerView);
+    }
+}
+exports.default = App;
+
+},{"./core/heropy":"57bZf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"57bZf":[function(require,module,exports) {
+///// Component /////
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "Component", ()=>Component);
+parcelHelpers.export(exports, "createRouter", ()=>createRouter);
+///// Store /////
+parcelHelpers.export(exports, "Store", ()=>Store);
+class Component {
+    constructor(payload = {}){
+        const { tagName = "div", props = {}, state = {} } = payload;
+        this.el = document.createElement(tagName); // 컴포넌트의 최상위 요소
+        this.props = props; // 컴포넌트가 사용될 때 부모 컴포넌트에서 받는 데이터
+        this.state = state; // 컴포넌트 안에서 사용할 데이터
+        this.render();
+    }
+    render() {
+    // 컴포넌트를 렌더링하는 함수
+    // ...
+    }
+}
+///// Router /////
+// 페이지 렌더링!
+function routeRender(routes) {
+    // 접속할 때 해시 모드가 아니면(해시가 없으면) /#/로 리다이렉트!
+    if (!location.hash) history.replaceState(null, "", "/#/"); // (상태, 제목, 주소)
+    const routerView = document.querySelector("router-view");
+    const [hash, queryString = ""] = location.hash.split("?"); // 물음표를 기준으로 해시 정보와 쿼리스트링을 구분
+    // 1) 쿼리스트링을 객체로 변환해 히스토리의 상태에 저장!
+    const query = queryString.split("&").reduce((acc, cur)=>{
+        const [key, value] = cur.split("=");
+        acc[key] = value;
+        return acc;
+    }, {});
+    history.replaceState(query, ""); // (상태, 제목)
+    // 2) 현재 라우트 정보를 찾아서 렌더링!
+    const currentRoute = routes.find((route)=>new RegExp(`${route.path}/?$`).test(hash));
+    routerView.innerHTML = "";
+    routerView.append(new currentRoute.component().el);
+    // 3) 화면 출력 후 스크롤 위치 복구!
+    window.scrollTo(0, 0);
+}
+function createRouter(routes) {
+    // 원하는(필요한) 곳에서 호출할 수 있도록 함수 데이터를 반환!
+    return function() {
+        window.addEventListener("popstate", ()=>{
+            routeRender(routes);
+        });
+        routeRender(routes);
+    };
+}
+class Store {
+    constructor(state){
+        this.state = {}; // 상태(데이터)
+        this.observers = {};
+        for(const key in state)// 각 상태에 대한 변경 감시(Setter) 설정!
+        Object.defineProperty(this.state, key, {
+            // Getter
+            get: ()=>state[key],
+            // Setter
+            set: (val)=>{
+                state[key] = val;
+                if (Array.isArray(this.observers[key])) // 호출할 콜백이 있는 경우!
+                this.observers[key].forEach((observer)=>observer(val));
+            }
+        });
+    }
+    // 상태 변경 구독!
+    subscribe(key, cb) {
+        Array.isArray(this.observers[key]) // 이미 등록된 콜백이 있는지 확인!
+         ? this.observers[key].push(cb) // 있으면 새로운 콜백 밀어넣기!
+         : this.observers[key] = [
+            cb
+        ]; // 없으면 콜백 배열로 할당!
+    // 예시)
+    // observers = {
+    //   구독할상태이름: [실행할콜백1, 실행할콜백2]
+    //   movies: [cb, cb, cb],
+    //   message: [cb]
+    // }
+    }
+}
+
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gkKU3":[function(require,module,exports) {
+exports.interopDefault = function(a) {
+    return a && a.__esModule ? a : {
+        default: a
+    };
+};
+exports.defineInteropFlag = function(a) {
+    Object.defineProperty(a, "__esModule", {
+        value: true
+    });
+};
+exports.exportAll = function(source, dest) {
+    Object.keys(source).forEach(function(key) {
+        if (key === "default" || key === "__esModule" || Object.prototype.hasOwnProperty.call(dest, key)) return;
+        Object.defineProperty(dest, key, {
+            enumerable: true,
+            get: function() {
+                return source[key];
+            }
+        });
+    });
+    return dest;
+};
+exports.export = function(dest, destName, get) {
+    Object.defineProperty(dest, destName, {
+        enumerable: true,
+        get: get
+    });
+};
+
+},{}],"3L9mC":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _heropy = require("../core/heropy");
+var _homeJs = require("./Home.js");
+var _homeJsDefault = parcelHelpers.interopDefault(_homeJs);
+exports.default = (0, _heropy.createRouter)([
+    {
+        path: "#/",
+        component: (0, _homeJsDefault.default)
+    }
+]);
+
+},{"../core/heropy":"57bZf","./Home.js":"0JSNG","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"0JSNG":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _heropy = require("../core/heropy");
+var _headline = require("../components/Headline");
+var _headlineDefault = parcelHelpers.interopDefault(_headline);
+var _search = require("../components/Search");
+var _searchDefault = parcelHelpers.interopDefault(_search);
+var _movieList = require("../components/MovieList");
+var _movieListDefault = parcelHelpers.interopDefault(_movieList);
+class Home extends (0, _heropy.Component) {
+    render() {
+        const headline = new (0, _headlineDefault.default)().el;
+        const search = new (0, _searchDefault.default)().el;
+        const movieList = new (0, _movieListDefault.default)().el;
+        this.el.classList.add("container");
+        this.el.append(headline, search, movieList);
+    }
+}
+exports.default = Home;
+
+},{"../core/heropy":"57bZf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../components/Headline":"gaVgo","../components/Search":"jqPPz","../components/MovieList":"8UDl3"}],"gaVgo":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _heropy = require("../core/heropy");
+class Headline extends (0, _heropy.Component) {
+    render() {
+        this.el.classList.add("headline");
+        this.el.innerHTML = /*html */ `
+        <h1>
+            <span>OMDb API </span><br>
+            THE OPEN<br>
+            MOVIE DATABASE
+        </h1>
+        <p>
+        The OMDb API is a RESTful web service to obtain movie information, 
+        all content and images on the site are contributed and maintained by our users. <br>
+        If you find this service useful, please consider making a one-time donation or become a patron.
+        </p>
+        `;
+    }
+}
+exports.default = Headline;
+
+},{"../core/heropy":"57bZf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"jqPPz":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _heropy = require("../core/heropy");
+var _movie = require("../store/movie");
+var _movieDefault = parcelHelpers.interopDefault(_movie);
+class Search extends (0, _heropy.Component) {
+    render() {
+        this.el.classList.add("search");
+        this.el.innerHTML = /* html */ `
+        <input placeholder="Enter the movie title to search!"/>
+        <button class="btn btn-primary">
+            Search!    
+        </button>
+        `;
+        const inputEl = this.el.querySelector("input");
+        inputEl.addEventListener("input", ()=>{
+            (0, _movieDefault.default).state.searchText = inputEl.value;
+        });
+        inputEl.addEventListener("keydown", (event)=>{
+            if (event.key === "Enter" && (0, _movieDefault.default).state.searchText.trim()) (0, _movie.searchMovies)(1);
+        });
+        const btnEl = this.el.querySelector(".btn");
+        btnEl.addEventListener("click", ()=>{
+            if ((0, _movieDefault.default).state.searchText.trim()) (0, _movie.searchMovies)(1);
+        });
+    }
+}
+exports.default = Search;
+
+},{"../core/heropy":"57bZf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../store/movie":"kq1bo"}],"kq1bo":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+parcelHelpers.export(exports, "searchMovies", ()=>searchMovies);
+var _heropy = require("../core/heropy");
+const store = new (0, _heropy.Store)({
+    searchText: "",
+    page: 1,
+    movies: []
+});
+exports.default = store;
+const searchMovies = async (page)=>{
+    if (page === 1) {
+        store.state.page = 1; //화면갱신
+        store.state.movies = [];
+    }
+    const res = await fetch(`https://omdbapi.com?apikey=7035c60c&s=${store.state.searchText}&page=${page}`);
+    const { Search } = await res.json();
+    store.state.movies = [
+        ...store.state.movies,
+        ...Search
+    ];
+};
+
+},{"../core/heropy":"57bZf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8UDl3":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _heropy = require("../core/heropy");
+var _movie = require("../store/movie");
+var _movieDefault = parcelHelpers.interopDefault(_movie);
+class MovieList extends (0, _heropy.Component) {
+    constructor(){
+        super();
+        (0, _movieDefault.default).subscribe("movies", ()=>{
+            this.render();
+        });
+    }
+    render() {
+        this.el.classList.add("movie-list");
+        this.el.innerHTML = /*html */ `
+        <div class="movies"> </div>
+        `;
+        const moviesEl = this.el.querySelector(".movies");
+        moviesEl.append((0, _movieDefault.default).state.movies.map((movie)=>{
+            return movie.Title;
+        }));
+    }
+}
+exports.default = MovieList;
+
+},{"../core/heropy":"57bZf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../store/movie":"kq1bo"}]},["3zq8u","gLLPy"], "gLLPy", "parcelRequire6588")
 
 //# sourceMappingURL=index.4d6bcbeb.js.map
