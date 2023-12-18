@@ -738,7 +738,7 @@ class TheHeader extends (0, _heropy.Component) {
             }
         });
         window.addEventListener("popstate", ()=>{
-            this.render();
+            this.render(); // 페이지가 로드될때 active클래스 추가
         });
     }
     render() {
