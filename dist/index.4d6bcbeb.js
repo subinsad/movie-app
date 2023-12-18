@@ -829,6 +829,8 @@ var _movieJs = require("./Movie.js");
 var _movieJsDefault = parcelHelpers.interopDefault(_movieJs);
 var _aboutJs = require("./About.js");
 var _aboutJsDefault = parcelHelpers.interopDefault(_aboutJs);
+var _notFoundJs = require("./NotFound.js");
+var _notFoundJsDefault = parcelHelpers.interopDefault(_notFoundJs);
 exports.default = (0, _heropy.createRouter)([
     {
         path: "#/",
@@ -841,10 +843,14 @@ exports.default = (0, _heropy.createRouter)([
     {
         path: "#/about",
         component: (0, _aboutJsDefault.default)
+    },
+    {
+        path: ".*",
+        component: (0, _notFoundJsDefault.default)
     }
 ]);
 
-},{"../core/heropy":"57bZf","./Home.js":"0JSNG","./Movie.js":"1LTyN","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./About.js":"gdB30"}],"0JSNG":[function(require,module,exports) {
+},{"../core/heropy":"57bZf","./Home.js":"0JSNG","./Movie.js":"1LTyN","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./About.js":"gdB30","./NotFound.js":"4fDiL"}],"0JSNG":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _heropy = require("../core/heropy");
@@ -1157,6 +1163,23 @@ class About extends (0, _heropy.Component) {
 }
 exports.default = About;
 
-},{"../core/heropy":"57bZf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../store/about":"4RAJO"}]},["3zq8u","gLLPy"], "gLLPy", "parcelRequire6588")
+},{"../core/heropy":"57bZf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../store/about":"4RAJO"}],"4fDiL":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _heropy = require("../core/heropy");
+class NotFound extends (0, _heropy.Component) {
+    render() {
+        this.el.classList.add("container", "not-found");
+        this.el.innerHTML = /* html */ `
+        <h1> 
+            Sorry...<br>
+            Page Not Found.
+        </h1>
+        `;
+    }
+}
+exports.default = NotFound;
+
+},{"../core/heropy":"57bZf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["3zq8u","gLLPy"], "gLLPy", "parcelRequire6588")
 
 //# sourceMappingURL=index.4d6bcbeb.js.map
