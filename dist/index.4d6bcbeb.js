@@ -602,7 +602,7 @@ class App extends (0, _heropy.Component) {
 }
 exports.default = App;
 
-},{"./core/heropy":"57bZf","./components/TheHeader":"3Cyq4","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./components/TheFooter":"b3x3c"}],"57bZf":[function(require,module,exports) {
+},{"./core/heropy":"57bZf","./components/TheHeader":"3Cyq4","./components/TheFooter":"b3x3c","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"57bZf":[function(require,module,exports) {
 ///// Component /////
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -779,6 +779,8 @@ exports.default = TheHeader;
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _heropy = require("../core/heropy");
+var _about = require("../store/about");
+var _aboutDefault = parcelHelpers.interopDefault(_about);
 class TheFooter extends (0, _heropy.Component) {
     constructor(){
         super({
@@ -786,14 +788,15 @@ class TheFooter extends (0, _heropy.Component) {
         });
     }
     render() {
+        const { github, repository } = (0, _aboutDefault.default).state;
         this.el.innerHTML = /* html */ `
         <div>
-            <a href="https://github.com/subinsad/movie-app">
+            <a href="${repository}">
                 github Repository    
             </a>
         </div>
         <div>
-            <a href="https://github.com/subinsad/movie-app">
+            <a href="${github}">
                 ${new Date().getFullYear()}
                 subin
             </a>
@@ -803,6 +806,19 @@ class TheFooter extends (0, _heropy.Component) {
 }
 exports.default = TheFooter;
 
+},{"../core/heropy":"57bZf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../store/about":"4RAJO"}],"4RAJO":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _heropy = require("../core/heropy");
+exports.default = new (0, _heropy.Store)({
+    photo: "https://heropy.blog/css/images/logo.png",
+    name: "HEROPY / subin",
+    email: "subin@naver.com",
+    blog: "https://velog.io/@subinsad",
+    github: "https://github.com/subinsad",
+    repository: "https://github.com/subinsad/movie-app"
+});
+
 },{"../core/heropy":"57bZf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3L9mC":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -811,6 +827,8 @@ var _homeJs = require("./Home.js");
 var _homeJsDefault = parcelHelpers.interopDefault(_homeJs);
 var _movieJs = require("./Movie.js");
 var _movieJsDefault = parcelHelpers.interopDefault(_movieJs);
+var _aboutJs = require("./About.js");
+var _aboutJsDefault = parcelHelpers.interopDefault(_aboutJs);
 exports.default = (0, _heropy.createRouter)([
     {
         path: "#/",
@@ -819,10 +837,14 @@ exports.default = (0, _heropy.createRouter)([
     {
         path: "#/movie",
         component: (0, _movieJsDefault.default)
+    },
+    {
+        path: "#/about",
+        component: (0, _aboutJsDefault.default)
     }
 ]);
 
-},{"../core/heropy":"57bZf","./Home.js":"0JSNG","./Movie.js":"1LTyN","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"0JSNG":[function(require,module,exports) {
+},{"../core/heropy":"57bZf","./Home.js":"0JSNG","./Movie.js":"1LTyN","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./About.js":"gdB30"}],"0JSNG":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _heropy = require("../core/heropy");
@@ -1110,6 +1132,31 @@ class Movie extends (0, _heropy.Component) {
 }
 exports.default = Movie;
 
-},{"../core/heropy":"57bZf","../store/movie":"kq1bo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["3zq8u","gLLPy"], "gLLPy", "parcelRequire6588")
+},{"../core/heropy":"57bZf","../store/movie":"kq1bo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gdB30":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _heropy = require("../core/heropy");
+var _about = require("../store/about");
+var _aboutDefault = parcelHelpers.interopDefault(_about);
+class About extends (0, _heropy.Component) {
+    render() {
+        const { photo, name, email, github, blog } = (0, _aboutDefault.default).state;
+        this.el.classList.add("container", "about");
+        this.el.innerHTML = /* html */ `
+        <div
+            style="background-image:url(${photo})" 
+            class="photo"> </div>
+        <p class="name"> ${name} </p>
+        <p> <a 
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=${email}" 
+            target="_blank"> ${email} </a> </p>
+        <p> <a href="${github}" target="_blank"> github </a> </p>
+        <p> <a href="${blog}" target="_blank"> blog </a> </p>
+        `;
+    }
+}
+exports.default = About;
+
+},{"../core/heropy":"57bZf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../store/about":"4RAJO"}]},["3zq8u","gLLPy"], "gLLPy", "parcelRequire6588")
 
 //# sourceMappingURL=index.4d6bcbeb.js.map
