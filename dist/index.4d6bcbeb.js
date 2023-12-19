@@ -806,7 +806,7 @@ class TheFooter extends (0, _heropy.Component) {
 }
 exports.default = TheFooter;
 
-},{"../core/heropy":"57bZf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../store/about":"4RAJO"}],"4RAJO":[function(require,module,exports) {
+},{"../core/heropy":"57bZf","../store/about":"4RAJO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4RAJO":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _heropy = require("../core/heropy");
@@ -850,7 +850,7 @@ exports.default = (0, _heropy.createRouter)([
     }
 ]);
 
-},{"../core/heropy":"57bZf","./Home.js":"0JSNG","./Movie.js":"1LTyN","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","./About.js":"gdB30","./NotFound.js":"4fDiL"}],"0JSNG":[function(require,module,exports) {
+},{"../core/heropy":"57bZf","./Home.js":"0JSNG","./Movie.js":"1LTyN","./About.js":"gdB30","./NotFound.js":"4fDiL","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"0JSNG":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _heropy = require("../core/heropy");
@@ -953,7 +953,13 @@ const searchMovies = async (page)=>{
         store.state.message = "";
     }
     try {
-        const res = await fetch(`https://omdbapi.com?apikey=7035c60c&s=${store.state.searchText}&page=${page}`);
+        const res = await fetch("/api/movie", {
+            method: "POST",
+            body: JSON.stringify({
+                title: store.state.searchText,
+                page
+            })
+        });
         const { Search, totalResults, Response, Error } = await res.json();
         if (Response === "True") {
             store.state.movies = [
@@ -970,7 +976,12 @@ const searchMovies = async (page)=>{
 };
 const getMovieDetails = async (id)=>{
     try {
-        const res = await fetch(`https://omdbapi.com?apikey=7035c60c&i=${id}&plot=full`);
+        const res = await fetch("/api/movie", {
+            method: "POST",
+            body: JSON.stringify({
+                id
+            })
+        });
         store.state.movie = await res.json();
     } catch (error) {
         console.log("getMovieDetails error", error);
@@ -1163,7 +1174,7 @@ class About extends (0, _heropy.Component) {
 }
 exports.default = About;
 
-},{"../core/heropy":"57bZf","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../store/about":"4RAJO"}],"4fDiL":[function(require,module,exports) {
+},{"../core/heropy":"57bZf","../store/about":"4RAJO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4fDiL":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _heropy = require("../core/heropy");
